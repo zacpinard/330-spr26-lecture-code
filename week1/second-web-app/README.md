@@ -1,0 +1,14 @@
+# Express App Template
+
+This folder contains a reusable Express starter. It includes:
+
+- an Express server entrypoint
+- Babel, ESLint and Prettier configuration
+- Installed packages for testing (`jest`, `supertest`)
+
+## Getting started
+
+1. Copy/paste this template and rename the `name` property in `package.json`
+2. From the folder, run `npm install`.
+3. Start the dev server with `npm run dev`.
+4. Run tests with `npm test`.
