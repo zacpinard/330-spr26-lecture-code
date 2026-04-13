@@ -12,4 +12,12 @@ const widgetSchema = new mongoose.Schema({
   parts: { type: [partsSchema] },
 });
 
+// {
+//   name: 'Car',
+//   parts: [
+//     {name: "Wheel"},
+//     {name:'Fender'},
+//   ]
+// }
+
 export default mongoose.model('widgets', widgetSchema);

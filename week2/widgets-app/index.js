@@ -4,6 +4,9 @@ import server from './server';
 const port = process.env.PORT || 3000;
 
 mongoose.connect('mongodb://localhost/jscript-330-spr26').then(() => {
+  // eslint-disable-next-line no-console
+    console.log(`Connected to MongoDB`);
+
   server.listen(port, () => {
     // eslint-disable-next-line no-console
     console.log(`Server is listening on http://localhost:${port}`);

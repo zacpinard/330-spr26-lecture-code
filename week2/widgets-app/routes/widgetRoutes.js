@@ -1,6 +1,13 @@
 import { Router } from 'express';
+import * as WidgetsDao from '../daos/widgets';
 
 const router = Router();
+
+// GET
+router.get('/', async (req, res) => {
+  const widgets = await WidgetsDao.getAll()
+  res.status(200).json(widgets);
+})
 
 // Create
 router.post('/', async (req, res) => {
@@ -9,13 +16,15 @@ router.post('/', async (req, res) => {
     res.status(400).send('widget is required');
   } else {
     // TODO: save widget here
+    const newWidget = await WidgetsDao.create(widget)
+    res.status(201).send(newWidget);
   }
 });
 
 // Read - single widget
 router.get('/:id', async (req, res) => {
   const widgetId = req.params.id;
-  const widget = null; // TODO: get widget here;
+  const widget = await WidgetsDao.getById(widgetId)// TODO: get widget here;
   if (widget) {
     res.json(widget);
   } else {
@@ -31,6 +40,8 @@ router.put('/:id', async (req, res) => {
     res.status(400).send('widget is required"');
   } else {
     // TODO: update widget here
+    await WidgetsDao.update(widgetId, widget);
+    res.status(204).send();
   }
 });
 
@@ -38,6 +49,9 @@ router.put('/:id', async (req, res) => {
 router.delete('/:id', async (req, res) => {
   const widgetId = req.params.id;
   // TODO: delete widget here
+  await WidgetsDao.deleteById(widgetId)
+  res.status(204).send();
+
 });
 
 export default router;
