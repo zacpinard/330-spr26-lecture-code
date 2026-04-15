@@ -22,3 +22,13 @@ export const updateById = (userId, transactionId, newObj) =>
   Transaction.updateOne({ _id: transactionId, userId }, newObj);
 
 export const create = (transactionData) => Transaction.create(transactionData);
+
+export const getStats = async (userId) => Transaction.aggregate([
+  { $match: { userId } },
+  { $group: {
+    _id: '$userId',
+    averageCharge: { $avg: '$charge' },
+    maxCharge: { $max: '$charge' }
+  } },
+  { $project: { _id: 0 } }
+]);
