@@ -33,7 +33,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Update
-router.put('/:id', async (req, res) => {
+router.patch('/:id', async (req, res) => {
   const widgetId = req.params.id;
   const widget = req.body;
   if (!widget || JSON.stringify(widget) === '{}') {
