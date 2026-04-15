@@ -18,3 +18,12 @@ db.items.find({ categories: 'food' })
 db.items.find({ 'categories.1': {$exists: true}})
 // ● Items whose name starts with “large”
 db.items.find({name: /^large/}) //regex
+
+//find all this shit in mongoose documentation
+
+
+//Aggregation [basic find-esque]
+db.books.aggregate([ { $match: { genre: 'Fantasy' } }] )
+
+//same as
+db.books.find({ genre: 'Fantasy' })
