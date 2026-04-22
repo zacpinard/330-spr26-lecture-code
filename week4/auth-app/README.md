@@ -17,6 +17,8 @@ This folder contains a reusable Express starter. It includes:
 ## Planning: POST /signup route
 
 * Setup MongoDB
+  * Install mongoose
+  * Connect to MongoDB via Mongoose
 * Create a user record
   * email
   * password (eventually store securely, sooner rather than later)
