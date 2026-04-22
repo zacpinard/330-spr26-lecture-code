@@ -24,7 +24,11 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => { 
+  console.log(`AUDIT LOG FOR LOGIN: USER: ${req.body.email}`);
+  next();
+},
+async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
@@ -38,15 +42,20 @@ router.post('/login', async (req, res) => {
       return res.status(200).json({ token });
     }
     return res.status(401).send('unauthorized');
-})
-
-router.post('/verify', async (req, res) => {
-  try {
-    const payload = jwt.verify(token, 'secret', /*{expiresIn: '15m'}*/);
-    return res.json({ payload, valid: true})
-  } catch (error) {
-    return res.status(401).send('unauthorized')
   }
-})
+)
+
+router.post('/verify', logger, jwtVerify, async (req, res) => {
+  // const authorizationHeader = req.headers.authorization;
+  // const token = authorizationHeader.split(' ')[1];
+
+  // try {
+  //   const payload = jwt.verify(token, 'secret', /*{expiresIn: '15m'}*/);
+  //   return res.json({ payload, valid: true});
+  // } catch (error) {
+  //   return res.status(401).send('unauthorized');
+  // }
+  res.json({ payload: req.user, valid: true });
+});
 
 export default router;
