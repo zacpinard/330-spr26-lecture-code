@@ -1,5 +1,6 @@
 import express from 'express';
 import bcrypt from 'bcrypt'
+import jwt from 'jsonwebtoken'
 import User from '../models/user';
 
 
@@ -33,11 +34,19 @@ router.post('/login', async (req, res) => {
   const hashedPassword = user.password;
   const isAuthenticated = await bcrypt.compare(password, hashedPassword);
     if (isAuthenticated) {
-      return res.status(200).send('authenticated');
+      const token = jwt.sign({ email: user.email }, 'secret');
+      return res.status(200).json({ token });
     }
-
     return res.status(401).send('unauthorized');
 })
 
+router.post('/verify', async (req, res) => {
+  try {
+    const payload = jwt.verify(token, 'secret', /*{expiresIn: '15m'}*/);
+    return res.json({ payload, valid: true})
+  } catch (error) {
+    return res.status(401).send('unauthorized')
+  }
+})
 
 export default router;
