@@ -27,3 +27,62 @@ db.books.aggregate([ { $match: { genre: 'Fantasy' } }] )
 
 //same as
 db.books.find({ genre: 'Fantasy' })
+
+// Aggregation
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' } } }
+]);
+
+// Aggregation (group by, another accumulator object)
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' }, averageRating: { $avg: '$rating'} } }
+]);
+
+// projection example
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' }, averageRating: { $avg: '$rating'} } },
+  { $project: { _id: 0 } }
+]);
+
+// projection example with a rename + show a couple attributes
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' }, averageRating: { $avg: '$rating'} } },
+  { $project: { _id: 0, publisher: '$_id', titles: 1, averageRating: 1 } }
+]);
+
+// Filter based on average book rating for Fantasy titles by publisher
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' }, averageRating: { $avg: '$rating'} } },
+  { $project: { _id: 0, publisher: '$_id', titles: 1, averageRating: 1 } },
+  { $match: { averageRating: { $gt: 4 } } }
+]);
+
+// Unwind based on book titles
+db.books.aggregate([
+  { $match: { genre: "Fantasy" } },
+  { $group: { _id: '$publisher', titles: { $addToSet: '$title' }, averageRating: { $avg: '$rating'} } },
+  { $project: { _id: 0, publisher: '$_id', titles: 1, averageRating: 1 } },
+  { $match: { averageRating: { $gt: 4 } } },
+  { $unwind: '$titles' },
+  { $project: { titles: '$titles', averageRating: 1, publisher: 1 } }
+]);
+
+// Lookup author -> books
+db.authors.aggregate([{
+  $lookup: {
+    from: 'books',
+    localField: 'booksArray',
+    foreignField: '_id',
+    as: 'books',
+
+  }
+}, {
+  $project: { name: 1, authoredBooks: 1, _id: 0 }
+
+}, { $limit: 5 }
+])
