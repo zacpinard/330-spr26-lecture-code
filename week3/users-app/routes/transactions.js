@@ -23,7 +23,8 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/stats', async (req, res) => {
-  const stats = {};
+  const {userId} = req.params;
+  const stats = await transactionDao.getStats(userId);
   res.json(stats);
 });
 
