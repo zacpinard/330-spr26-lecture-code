@@ -1,5 +1,6 @@
 import express from 'express';
-import authRoutes from './routes/auth'
+import authRoutes from './routes/auth';
+import mongoose from 'mongoose';
 
 const server = express();
 
