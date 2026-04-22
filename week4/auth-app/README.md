@@ -12,3 +12,13 @@ This folder contains a reusable Express starter. It includes:
 2. From the folder, run `npm install`.
 3. Start the dev server with `npm run dev`.
 4. Run tests with `npm test`.
+
+
+## Planning: POST /signup route
+
+* Setup MongoDB
+* Create a user record
+  * email
+  * password (eventually store securely, sooner rather than later)
+* Implement route in express
+* Tests
